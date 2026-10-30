@@ -69,6 +69,9 @@ poetry run task docks
 
 # Compilar documentação estática em modo estrito
 poetry run task docks:build
+
+# Executar todos os hooks do pre-commit manualmente
+poetry run task precommit
 ```
 
 ---
@@ -81,4 +84,3 @@ A documentação detalhada com arquitetura, referência de endpoints e pipelines
 poetry run task docks
 ```
 Acesse `http://127.0.0.1:8000` no seu navegador.
-

@@ -39,4 +39,3 @@ flowchart LR
 2. **Rate Limiting Defensivo**: Token bucket/mínimo espaçamento temporal para evitar HTTP 429.
 3. **Padrão AAA em Testes**: Mocks estritos sem chamadas reais à rede e cobertura obrigatória de no mínimo 50%.
 4. **Idempotência**: Escrita com `existing_data_behavior='delete_matching'`, substituindo apenas a partição processada.
-
