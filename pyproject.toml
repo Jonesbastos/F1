@@ -1,0 +1,63 @@
+[project]
+name = "f1"
+version = "0.1.0"
+description = "F1 Data Platform with OpenF1 API"
+authors = [
+    {name = "Jonesbastos", email = "89113261+Jonesbastos@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+    "pandas (>=3.1.0,<4.0.0)",
+    "pydantic (>=2.14.2,<3.0.0)",
+    "pydantic-settings (>=2.16.2,<3.0.0)",
+    "requests (>=2.34.2,<3.0.0)",
+    "pyarrow (>=26.0.0,<27.0.0)",
+    "streamlit (>=1.66.1,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "f1", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.17.3,<0.18.0)",
+    "pytest (>=9.2.0,<10.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "pytest-mock (>=3.17.0,<4.0.0)",
+    "mkdocs (>=1.6.1,<2.0.0)",
+    "mkdocs-material (>=9.8.0,<10.0.0)",
+    "mkdocstrings[python] (>=1.0.8,<2.0.0)",
+    "taskipy (>=1.14.1,<2.0.0)"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["f1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--cov=f1 --cov-report=term-missing --cov-fail-under=50"
+
+[tool.taskipy.tasks]
+test = "pytest"
+lint = "ruff check ."
+format = "ruff format ."
+docs = "mkdocs serve"
+docks = "mkdocs serve"
+"docs:build" = "mkdocs build --strict"
+"docks:build" = "mkdocs build --strict"
+dashboard = "python -m f1.dashboard.app"
+
+

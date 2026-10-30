@@ -1,0 +1,45 @@
+site_name: F1 Data Platform
+site_description: Plataforma moderna de engenharia de dados da Fórmula 1 com OpenF1 API, Poetry, Parquet e MkDocs.
+site_author: Equipe de Engenharia de Dados
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - scheme: default
+      primary: red
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Mudar para modo escuro
+    - scheme: slate
+      primary: red
+      accent: red
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para modo claro
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: true
+
+nav:
+  - Visão Geral: index.md
+  - Arquitetura: architecture.md
+  - OpenF1 API: openf1_api.md
+  - Pipelines & CLI: pipelines.md
+
