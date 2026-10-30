@@ -3,6 +3,7 @@
 import json
 import threading
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 from urllib.request import urlopen
 
 import pandas as pd
@@ -157,9 +158,11 @@ def test_http_post_sync(running_server: str) -> None:
     """Verifica acionamento da rota de sincronização /api/sync."""
     import urllib.request
 
-    req = urllib.request.Request(f"{running_server}/api/sync", data=b"", method="POST")
-    with urlopen(req) as response:
-        assert response.status == 200
-        data = json.loads(response.read().decode("utf-8"))
-        assert data["status"] == "sync_started"
-
+    with patch("f1.pipelines.session_pipeline.SessionPipeline") as mock_pipe:
+        mock_instance = MagicMock()
+        mock_pipe.return_value = mock_instance
+        req = urllib.request.Request(f"{running_server}/api/sync", data=b"", method="POST")
+        with urlopen(req) as response:
+            assert response.status == 200
+            data = json.loads(response.read().decode("utf-8"))
+            assert data["status"] == "sync_started"

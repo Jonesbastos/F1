@@ -1,5 +1,4 @@
-"""Provedor de dados para o Dashboard lendo a camada analítica Parquet com fallback.
-"""
+"""Provedor de dados para o Dashboard lendo a camada analítica Parquet com fallback."""
 
 from pathlib import Path
 from typing import Any
