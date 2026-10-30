@@ -1,10 +1,10 @@
 # 🏎️ OpenF1 API — Documentação Resumida
 
-> **Base URL:** `https://api.openf1.org/v1`  
-> **Autenticação:** Nenhuma necessária (acesso público e gratuito)  
-> **Rate Limit:** ~3 requisições por segundo (Tier comunitário)  
-> **Formatos de Saída:** JSON (padrão) | CSV (parâmetro `?csv=true`)  
-> **Cobertura Histórica:** Temporada 2023 em diante  
+> **Base URL:** `https://api.openf1.org/v1`
+> **Autenticação:** Nenhuma necessária (acesso público e gratuito)
+> **Rate Limit:** ~3 requisições por segundo (Tier comunitário)
+> **Formatos de Saída:** JSON (padrão) | CSV (parâmetro `?csv=true`)
+> **Cobertura Histórica:** Temporada 2023 em diante
 
 ---
 

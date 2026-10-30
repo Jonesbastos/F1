@@ -210,7 +210,9 @@ def run_dashboard(
         data_dir: Diretório raiz do Data Lake para leitura dos dados.
     """
     server = create_server(host=host, port=port, data_dir=data_dir)
-    url = f"http://localhost:{port}" if host in ("127.0.0.1", "0.0.0.0") else f"http://{host}:{port}"
+    url = (
+        f"http://localhost:{port}" if host in ("127.0.0.1", "0.0.0.0") else f"http://{host}:{port}"
+    )
     logger.info("🏎️  F1 Dashboard iniciado com sucesso!")
     logger.info("Acesse a interface no navegador: %s", url)
     logger.info("Pressione Ctrl+C para encerrar o servidor.")

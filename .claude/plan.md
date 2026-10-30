@@ -313,4 +313,3 @@ Para cada etapa desenvolvida, os seguintes critérios devem ser estritamente cum
 - [ ] O site de documentação compila sem falhas (`poetry run mkdocs build --strict`).
 - [ ] Todas as funções e métodos possuem docstrings no padrão Google Style e type hints completos.
 - [ ] O `.env.example` está atualizado e nenhuma credencial foi exposta.
-

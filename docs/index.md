@@ -47,4 +47,3 @@ poetry run task format
 # Iniciar servidor local da documentação MkDocs (atalho: task docks)
 poetry run task docks
 ```
-
