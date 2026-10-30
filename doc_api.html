@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenF1 API — Documentação Resumida</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #e10600; /* F1 Red */
+      --accent-subtle: rgba(225, 6, 0, 0.15);
+      --code-bg: #1f242c;
+      --badge-bg: #21262d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .meta-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      font-size: 0.95rem;
+    }
+    .meta-item strong { color: #fff; }
+    h2 {
+      font-size: 1.5rem;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      color: #58a6ff;
+    }
+    h3 {
+      font-size: 1.2rem;
+      margin: 1.75rem 0 0.5rem;
+      color: #f0f6fc;
+    }
+    p { margin-bottom: 0.75rem; color: #c9d1d9; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      background-color: var(--card-bg);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    th {
+      background-color: #21262d;
+      color: #f0f6fc;
+      font-weight: 600;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+      font-size: 0.85em;
+      color: #ff7b72;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 1.25rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: #79c0ff;
+      font-size: 0.9rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 4px;
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+    }
+    .badge-get {
+      background: #238636;
+      color: #ffffff;
+      border: none;
+    }
+    .tip {
+      background: rgba(56, 139, 253, 0.1);
+      border-left: 4px solid #388bfd;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    footer a { color: #58a6ff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏎️ OpenF1 API — Documentação Resumida</h1>
+      <p>Guia rápido de referência dos endpoints, parâmetros e estruturas de resposta da API do OpenF1.</p>
+    </header>
+
+    <div class="meta-box">
+      <div class="meta-item"><strong>Base URL:</strong> <code>https://api.openf1.org/v1</code></div>
+      <div class="meta-item"><strong>Autenticação:</strong> Nenhuma (Pública / Gratuita)</div>
+      <div class="meta-item"><strong>Rate Limit:</strong> ~3 req/s (Tier comunitário)</div>
+      <div class="meta-item"><strong>Formatos:</strong> JSON (padrão) | CSV (<code>?csv=true</code>)</div>
+      <div class="meta-item"><strong>Cobertura:</strong> Temporada 2023 em diante</div>
+    </div>
+
+    <h2>📌 Parâmetros e Filtros Comuns</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Parâmetro</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Exemplo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>session_key</code></td>
+          <td>integer</td>
+          <td>ID único da sessão (treino, quali, corrida). Aceita <code>latest</code></td>
+          <td><code>session_key=9158</code></td>
+        </tr>
+        <tr>
+          <td><code>meeting_key</code></td>
+          <td>integer</td>
+          <td>ID único do fim de semana de GP. Aceita <code>latest</code></td>
+          <td><code>meeting_key=1219</code></td>
+        </tr>
+        <tr>
+          <td><code>driver_number</code></td>
+          <td>integer</td>
+          <td>Número oficial do carro do piloto</td>
+          <td><code>driver_number=1</code></td>
+        </tr>
+        <tr>
+          <td><code>date></code>, <code>date<</code></td>
+          <td>string</td>
+          <td>Filtro temporal comparativo no padrão ISO 8601 (UTC)</td>
+          <td><code>date>=2024-03-02T15:00:00</code></td>
+        </tr>
+        <tr>
+          <td><code>csv</code></td>
+          <td>boolean</td>
+          <td>Retorna o resultado em CSV ao invés de JSON</td>
+          <td><code>csv=true</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tip">
+      💡 <strong>Operadores de Comparação:</strong> É possível utilizar <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> como sufixo ou prefixo para filtrar intervalos (ex: <code>speed&gt;=300</code>, <code>interval&lt;=0.5</code>).
+    </div>
+
+    <h2>🏁 Endpoints Principais</h2>
+
+    <h3>1. <span class="badge badge-get">GET</span> <code>/meetings</code> — Fins de Semana de GP</h3>
+    <p>Calendário e metadados dos eventos (fins de semana de corrida ou testes oficiais).</p>
+    <pre><code>GET https://api.openf1.org/v1/meetings?year=2024&country_name=Brazil</code></pre>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>meeting_key</code></td><td>integer</td><td>ID único do evento</td></tr>
+        <tr><td><code>meeting_name</code></td><td>string</td><td>Nome oficial (ex: <em>São Paulo Grand Prix</em>)</td></tr>
+        <tr><td><code>meeting_code</code></td><td>string</td><td>Código curto (ex: <em>BRA</em>)</td></tr>
+        <tr><td><code>year</code></td><td>integer</td><td>Ano da temporada</td></tr>
+        <tr><td><code>circuit_key</code></td><td>integer</td><td>ID do circuito</td></tr>
+        <tr><td><code>circuit_short_name</code></td><td>string</td><td>Nome popular da pista (ex: <em>Interlagos</em>)</td></tr>
+        <tr><td><code>country_name</code></td><td>string</td><td>País do evento</td></tr>
+        <tr><td><code>date_start</code></td><td>string</td><td>Data e hora de abertura (ISO 8601 UTC)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2. <span class="badge badge-get">GET</span> <code>/sessions</code> — Sessões de Pista</h3>
+    <p>Detalhes sobre cada sessão de um evento (Treinos Livres, Qualificação, Sprint e Corrida).</p>
+    <pre><code>GET https://api.openf1.org/v1/sessions?meeting_key=latest</code></pre>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>session_key</code></td><td>integer</td><td>ID único da sessão (chave primária)</td></tr>
+        <tr><td><code>session_name</code></td><td>string</td><td>Nome da sessão (<em>Practice 1</em>, <em>Qualifying</em>, <em>Race</em>)</td></tr>
+        <tr><td><code>session_type</code></td><td>string</td><td>Classificação (<em>Practice</em>, <em>Qualifying</em>, <em>Race</em>)</td></tr>
+        <tr><td><code>meeting_key</code></td><td>integer</td><td>ID do evento pai</td></tr>
+        <tr><td><code>date_start</code> / <code>date_end</code></td><td>string</td><td>Timestamps de início e fim da sessão</td></tr>
+        <tr><td><code>gmt_offset</code></td><td>string</td><td>Fuso horário local em relação ao GMT</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3. <span class="badge badge-get">GET</span> <code>/drivers</code> — Grid de Pilotos</h3>
+    <p>Relação de pilotos inscritos em uma sessão com dados biográficos, fotos e equipe.</p>
+    <pre><code>GET https://api.openf1.org/v1/drivers?session_key=latest</code></pre>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>driver_number</code></td><td>integer</td><td>Número oficial do carro (ex: <code>1</code>, <code>44</code>, <code>16</code>)</td></tr>
+        <tr><td><code>full_name</code></td><td>string</td><td>Nome completo (ex: <em>Max Verstappen</em>)</td></tr>
+        <tr><td><code>broadcast_name</code></td><td>string</td><td>Nome na transmissão de TV (ex: <em>M VERSTAPPEN</em>)</td></tr>
+        <tr><td><code>name_acronym</code></td><td>string</td><td>Sigla de 3 letras (ex: <em>VER</em>, <em>HAM</em>, <em>LEC</em>)</td></tr>
+        <tr><td><code>team_name</code></td><td>string</td><td>Nome da equipe / construtor</td></tr>
+        <tr><td><code>team_colour</code></td><td>string</td><td>Cor oficial em formato hexadecimal (ex: <code>3671C6</code>)</td></tr>
+        <tr><td><code>headshot_url</code></td><td>string</td><td>Link direto para foto oficial do piloto</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4. <span class="badge badge-get">GET</span> <code>/laps</code> — Voltas e Setores</h3>
+    <p>Dados volta a volta com duração total, tempos dos três setores e micro-setores.</p>
+    <pre><code>GET https://api.openf1.org/v1/laps?session_key=9161&driver_number=63&lap_number=8</code></pre>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>lap_number</code></td><td>integer</td><td>Número da volta na sessão</td></tr>
+        <tr><td><code>driver_number</code></td><td>integer</td><td>Número do piloto</td></tr>
+        <tr><td><code>lap_duration</code></td><td>float</td><td>Duração total em segundos (ex: <code>87.421</code>)</td></tr>
+        <tr><td><code>duration_sector_1/2/3</code></td><td>float</td><td>Tempos individuais por setor</td></tr>
+        <tr><td><code>segments_sector_1/2/3</code></td><td>array</td><td>Status detalhado dos micro-setores</td></tr>
+        <tr><td><code>is_pit_out_lap</code></td><td>boolean</td><td>Indica se é volta de saída do pit lane</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5. <span class="badge badge-get">GET</span> <code>/car_data</code> — Telemetria de Alta Frequência</h3>
+    <p>Leituras dos sensores dos carros a uma frequência de ~3.7 Hz.</p>
+    <pre><code>GET https://api.openf1.org/v1/car_data?session_key=latest&driver_number=1&speed>=300</code></pre>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>speed</code></td><td>integer</td><td>Velocidade instantânea em km/h</td></tr>
+        <tr><td><code>rpm</code></td><td>integer</td><td>Rotações por minuto do motor</td></tr>
+        <tr><td><code>gear</code></td><td>integer</td><td>Marcha engatada (0 = Neutro, 1 a 8)</td></tr>
+        <tr><td><code>throttle</code></td><td>integer</td><td>Acelerador (0 a 100%)</td></tr>
+        <tr><td><code>brake</code></td><td>integer</td><td>Freio acionado (0 ou 1)</td></tr>
+        <tr><td><code>drs</code></td><td>integer</td><td>Status do DRS (0 a 14)</td></tr>
+        <tr><td><code>date</code></td><td>string</td><td>Timestamp UTC da amostra</td></tr>
+      </tbody>
+    </table>
+
+    <h3>6. <span class="badge badge-get">GET</span> <code>/location</code> — Posição 3D na Pista</h3>
+    <p>Coordenadas tridimensionais no traçado da pista a ~3.7 Hz.</p>
+    <pre><code>GET https://api.openf1.org/v1/location?session_key=latest&driver_number=44</code></pre>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Tipo</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>x</code>, <code>y</code>, <code>z</code></td><td>float</td><td>Coordenadas cartesianas e elevação no circuito</td></tr>
+        <tr><td><code>driver_number</code></td><td>integer</td><td>Número do piloto</td></tr>
+        <tr><td><code>date</code></td><td>string</td><td>Timestamp da coordenada</td></tr>
+      </tbody>
+    </table>
+
+    <h3>7. <span class="badge badge-get">GET</span> <code>/positions</code> — Posições na Corrida</h3>
+    <p>Classificação em pista atualizada periodicamente (~a cada 4s).</p>
+    <pre><code>GET https://api.openf1.org/v1/positions?session_key=latest&driver_number=1</code></pre>
+
+    <h3>8. <span class="badge badge-get">GET</span> <code>/intervals</code> — Intervalos e Gaps</h3>
+    <p>Diferenças temporais de corrida em relação ao líder e ao carro da frente.</p>
+    <pre><code>GET https://api.openf1.org/v1/intervals?session_key=9165&interval<=0.5</code></pre>
+
+    <h3>9. <span class="badge badge-get">GET</span> <code>/pit</code> — Pit Stops</h3>
+    <p>Duração do pit stop no box e tempo total percorrido no pit lane.</p>
+    <pre><code>GET https://api.openf1.org/v1/pit?session_key=latest&driver_number=16</code></pre>
+
+    <h3>10. <span class="badge badge-get">GET</span> <code>/stints</code> — Pneus e Compostos</h3>
+    <p>Controle do ciclo de vida dos pneus e compostos usados em cada stint (SOFT, MEDIUM, HARD, etc.).</p>
+    <pre><code>GET https://api.openf1.org/v1/stints?session_key=latest&driver_number=1</code></pre>
+
+    <h3>11. <span class="badge badge-get">GET</span> <code>/weather</code> — Clima no Autódromo</h3>
+    <p>Temperatura de ar e pista, umidade, vento, pressão e status de chuva.</p>
+    <pre><code>GET https://api.openf1.org/v1/weather?session_key=latest</code></pre>
+
+    <h3>12. <span class="badge badge-get">GET</span> <code>/race_control</code> — Direção de Prova</h3>
+    <p>Mensagens da direção de prova, Safety Car, penalidades e bandeiras (GREEN, YELLOW, RED, etc.).</p>
+    <pre><code>GET https://api.openf1.org/v1/race_control?session_key=latest&flag=RED</code></pre>
+
+    <h3>13. <span class="badge badge-get">GET</span> <code>/team_radio</code> — Rádio das Equipes</h3>
+    <p>Comunicações de rádio gravadas com URL direta para áudio em .mp3.</p>
+    <pre><code>GET https://api.openf1.org/v1/team_radio?session_key=latest&driver_number=1</code></pre>
+
+    <h2>💻 Exemplos com cURL</h2>
+    <pre><code># 1. Consultar todos os pilotos da última sessão
+curl -X GET "https://api.openf1.org/v1/drivers?session_key=latest"
+
+# 2. Consultar voltas do piloto #1 (Verstappen)
+curl -X GET "https://api.openf1.org/v1/laps?session_key=latest&driver_number=1"
+
+# 3. Telemetria acima de 310 km/h do piloto #44 (Hamilton)
+curl -X GET "https://api.openf1.org/v1/car_data?session_key=latest&driver_number=44&speed>=310"
+
+# 4. Mensagens da direção de prova com bandeiras
+curl -X GET "https://api.openf1.org/v1/race_control?session_key=latest&category=Flag"
+
+# 5. Baixar dados climáticos em CSV
+curl -X GET "https://api.openf1.org/v1/weather?session_key=latest&csv=true" -o clima.csv</code></pre>
+
+    <footer>
+      <p>Fonte e Documentação Oficial: <a href="https://openf1.org/docs" target="_blank" rel="noopener noreferrer">https://openf1.org/docs</a></p>
+    </footer>
+  </div>
+</body>
+</html>
+
